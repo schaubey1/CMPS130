@@ -1,0 +1,75 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{paralist}
+
+\newcommand{\cL}{\mathcal{L}}
+
+\title{CMPS 130: HW 2 \\ {\small \copyright C. Seshadhri, 2019}\\ {\small Completed by Sankalp Chaubey} \\ {\small 2/20/2019} \\ {\small CruzID: schaubey} }
+\date{}
+
+\begin{document}
+\maketitle
+
+
+\medskip
+
+\begin{compactenum}
+\item (0.5 points) Prove that all regular languages are CFLs. \medskip
+
+\textbf{Basis: } Suppose there is a regular language A. There must exist a  \emph { DFA B}  made of a 5-tuple $(Q,\Sigma,\delta,q_0,F)$. 
+such that the \emph {L(B)=A}. We can build a context free grammar, \emph {G}  made of a 4-tuple $(V,\Sigma,R,S)$. By using induction on the number of operators in a regular expression for L, we can prove that the regular language A is also context free. \medskip
+
+\textbf{Induction: } Suppose that it is possible to create a context free grammar for a regular expression with fewer than k operators, and this context free language produces the same language as the regular expression. Suppose the regular expression is \emph{A}. Then we can represent this with a regular expression R, such that R has k operators. \medskip
+
+\textbf{Proof}: There are three possible operations that can be taken at this point. Union, Concatenation, or Kleene Closure. Under Union, If \emph{R=${R_1}$+${R_2}$}, then assume if ${ R_1}$ is produced by a CFG with a start symbol ${S_1}$, and that ${R_2}$  is produced by a CFG with a start symbol c. We can create a new start state S with the rule of S $\rightarrow$ ${S_1}$ $\mid$ ${S_2}$. Using either production of \emph {S} with ${S_1}$ $\mid$ ${S_2}$. Both productions will produce strings exactly matched by ${R_i}$, with i being represented by 1 or 2 depending on the production that has been executed.
+Under Concatenation: If R=${R_1}$${R_2}$,then we are able to create a new context-free grammar using start state S and the production rule: S$\rightarrow$ ${S_1}$${S_2}$. By the inductive hypothesis, ${S_i}$, where \emph{i=1,2}, S will produce the corresponding string exactly in ${R_1}$ and ${R_2}$.
+Under Kleene operation : If R=${R*_i}$, then we create a CFG with start state  S $\rightarrow$ ${S_1}$${S_1}$ $\mid$ $\epsilon$. Then any strings matched by ${R*_i}$ can be generated.
+Using this, because any regular expression has an equivalent context-free grammar every regular language is context free. 
+\medskip
+\item (2 points) Prove that the language $\cL = \{x \ | \ x \ \textrm{is not of the form $ww, w \in \{0,1\}^*$} \}$
+is a CFL. This is a tricky problem, so let me give you a path. You do not necessarily have
+to follow this path, but you get partial credit for solving the following.
+\begin{compactenum}
+    \item (0.75 points) Let us make the alphabet $\{0,1,\#\}$. 
+    Prove that the language $\cL = \{x \ | \ x \ \textrm{is not of the form $w\#w, w \in \{0,1\}^*$} \}$
+    is a CFL. You can construct a PDA for this language. The $\#$ symbol marks the ``midpoint", and
+    makes it easy for the PDA.
+    \item (0.5 points) Prove that $\{0^i1^{i+j}0^j \ | \ i,j \geq 1\}$ is a CFL.
+\end{compactenum}
+If you combine the ideas from these, you can construct a PDA for $\cL$.
+
+\textbf{Basis of Part B:} If a language \emph{L} is context-free, then there exists some integer \emph{p$\geq$1}. Where \emph {p} is the pumping length, such that every string in \emph{s} in \emph{L} that has a length of \emph{p} or more symbols can be written as \emph{s=uvwxy}. Such that the following are satisfied, $\mid vx \mid$$\geq$ $1$, $\mid vwx \mid$$\leq$ $p$, u$v^{n}$w$x^{n}$y $\in$ L, for all \emph{n} $\geq$ 0. 
+
+\medskip
+\textbf{Proof:} Using ${0^i1^{i+j}0^j }$, we must divide \emph{S} in \emph{A} into 5 pieces, \emph{uvxyz}.  Assume a pumping value of 3. We may re-write our string as \emph{${0^p1^p0^p}$}, and then \emph{${0^31^30^3}$}, which gives 
+\emph{000111000}. Let \emph{u=0}, let \emph{v=00}, let \emph{x=111}, let \emph{y=00}, let \emph{z=0}. If testing Case 1, \emph {v} and \emph {y} can only contain one type of symbol.
+ Using \emph{${uv^ixy^iz}$}. Using \emph{i=2}. We get the string \emph{0000011100000}. The resulting string has a different number of 0s, 1s, and 0s, than indicated by the language of  ${0^i1^{i+j}0^j }$. The output should after pumping: \emph{0001111111111110}. This means that Case 1 of the pumping lemma fails, proving the language is not a CFL.  
+
+\medskip
+\item (1.25 points) Consider the following extension to Turing Machines. The transition function is of the form $\delta(q,\sigma,D) = (q',\sigma',D')$ where $D$ is the direction the head moved the \emph{last} time it visited this cell. (If it never visited this cell before, then $D$ defaults to LEFT.) Does this provide additional power to the Turing Machine? Why or why not?
+
+\medskip
+\textbf{Basis:} This provides additional power in the sense that it may add quicker calculation to the Turing Machine. This would happen by providing the information from the previous visit to the cell. Thus this allows the Turing Machine to not revisit a state and make operations such as a search algorithim quicker.  Along with that, this proof will follow the basis that a Turing Machine is as strong as any instructions provided to it. The more instructions, the more precise, the higher accountability for edge cases, the more powerful the machine. 
+
+\medskip
+\textbf{Proof}: We can emulate this by creating a Turing Machine that is defined as a 7-tuple: \emph{(Q, $\Gamma$, $\Sigma$, ${q_0 }$, F, $\sigma$, ${q_(reject)}$)} and  The transition function is of the form $\delta(q,\sigma,D) = (q',\sigma',D')$ where $D$ is the direction the head moved the \emph{last} time it visited this cell, called machine \emph{M}. Allow this machine to recognize the alphabet of $\sigma$. Provide \emph{M} with  instructions to search for the string \emph{"abb"} in variations of the string \emph{ababbab} with many more characters, reduced for the purpose of proof. If searching by the default left, a simple machine may reach error state. However, this transition function will allow us to skip over checking the beginning of the string after reaching the error state. Each Time the turing machine reaches "ab" it will be able to recall the direction it traveled and not visit the same cell twice, and allow the machine to more quickly find the last b, as opposed to revisiting a previous state to check again upon reaching a fail state. This contributes to making the overall execution of the search instruction quicker, and by extension, the Turing Machine "more powerful".
+\medskip
+\item (1.25 points) Consider a Turing Machine with a 2-dimensional tape. The head now has 4 possible moves,
+up, down, left, or right. (Everything else is analogous to a standard Turing Machine.)
+Prove that a Turing Machine with a 2-dimensional tape can be simulated by a standard Turing Machine.
+
+\medskip
+\textbf{Basis}: Assume there is a Turing Machine with registers and multiple tapes, this must be first converted to a Turing machine with no registers and multiple tapes, then a  Turing machine with a single tape.
+A multitape TM can be simulated by a standard turing machine. Suppose there is a machine with multiple tapes, \emph{M}. Create another machine with a singular tape, \emph{M'}. Allow this TM to move the head one state for \emph{n} 
+amount of tapes in the orginal machine. Allow the first machine \emph{M} machine to accept the alphabet of $\Sigma$.  Now have machine \emph{M'} accept the language of $\Sigma$ $\cup$ (The alphabet of $\Sigma$ modified with an accent mark above any part of the alphabet).
+Let \emph {M=\emph{(Q, $\Gamma$, $\Sigma$, ${q_0 }$, F, $\sigma$, ${q_(reject)}$)}}, where the \emph{F} state of \emph{M} will transition to the machine \emph{M'} defined as \emph{(Q', $\Gamma$', $\Sigma$', ${q_0 }$', F', $\sigma$', ${q_(reject)}$)}.
+ 
+\medskip
+\textbf{Proof}: In Machine \emph {M'}, we have a symbol with an accent mark for each part of the alphabet for Machine \emph{M}. This signifies the head position. Using this information, each part of the singular tape machine can be used to save information on each of the n tapes. Almost like a cursor. For this to work, the machine will start at the first part of the singular tape machine \emph{M'}. Then it will go look for the alphabet elements with an accent mark above it, reach the \emph{F} state, then it will return to the singular tape at the state of \emph{Q}. There will be \emph {k} accented elements, where \emph{M} has k tapes.  The set of machines will repeat this process for all elements. Through this, a turing machine with a 2 dimensional tape can be simulated using a standard Turing Machine. 
+\emph {Source: Seshadri Lecture, UCSC, CMPS130, 2/12/19}
+
+\end{compactenum}
+
+
+
+\end{document}
